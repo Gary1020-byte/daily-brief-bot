@@ -1,0 +1,10 @@
+config/state.json
+config/state.json.tmp
+__pycache__/
+*.pyc
+.DS_Store
+
+# Packaging artifacts — build output, never commit it
+*.zip
+build/
+dist/

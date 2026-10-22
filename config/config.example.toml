@@ -1,0 +1,22 @@
+[meta]
+title = "AI 與自架情報"
+keywords = ["agent", "llm", "mcp", "model", "ai", "docker", "tailscale", "obsidian", "automation", "self-host"]
+require_all_keywords = false
+
+[[sources]]
+name = "Simon Willison"
+axis = "AI 實務"
+url = "https://simonwillison.net/atom/everything/"
+enabled = true
+
+[[sources]]
+name = "Hacker News"
+axis = "社群熱門"
+url = "https://news.ycombinator.com/rss"
+enabled = true
+
+[[sources]]
+name = "Google AI Blog"
+axis = "AI 前沿"
+url = "https://blog.google/technology/ai/rss/"
+enabled = true

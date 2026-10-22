@@ -1,0 +1,41 @@
+2026-10-21 每日資訊簡報
+==============================
+
+AI 前沿
+------------------------------
+  Southeast Asia’s digital economy to hit $368 billion
+  10-21 12:00  ·  Google AI Blog
+  https://blog.google/company-news/inside-google/around-the-globe/google-asia/e-conomy-sea-report-2026/
+
+AI 實務
+------------------------------
+  eMudhra Intermediate CA Compromise
+  10-20 23:50  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/20/emudhra-certificates/
+
+  Battle Drones - a vibe coded RTS with audio-based multiplayer
+  10-20 19:34  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/20/battledrones/
+
+  My obituary for programming
+  10-19 23:58  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/19/my-obituary-for-programming/
+
+  llm-tools-datasette 0.1.1
+  10-18 23:43  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/18/llm-tools-datasette/
+
+社群熱門
+------------------------------
+  Good type against all odds
+  10-21 09:45  ·  Hacker News
+  https://unsung.aresluna.org/good-type-against-all-odds/
+
+  DeepInfer: High-performance inference framework for DeepSeek models
+  10-20 17:08  ·  Hacker News
+  https://github.com/deepseek-ai/DeepInfer
+
+  Does Ruby on Rails still make sense?
+  10-20 05:29  ·  Hacker News
+  https://tech.dirkjonker.nl/does-ruby-on-rails-make-sense/
+
