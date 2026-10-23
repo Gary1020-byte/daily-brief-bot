@@ -1,7 +1,7 @@
 # 產品頁文案（Lemon Squeezy）
 
 **定價**：單人版 $19 / 商用版 $49
-**上架平台**：Lemon Squeezy（**不要用 Gumroad** —— 台灣不在 Stripe 支援名單，Gumroad 只能走 PayPal）
+**上架平台**：Lemon Squeezy（費用率 8.2% vs Gumroad 15.7%；**兩者台灣都能收**，Gumroad 門檻較低 $10）
 
 ---
 
