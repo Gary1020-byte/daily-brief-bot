@@ -1,8 +1,27 @@
+# daily-brief 設定檔範例
+# ---------------------------------------------------------------------------
+# 這是範例檔。執行 `python3 src/daily_brief.py --init` 會把本檔複製成
+# `config/config.toml`,你再編輯那一份。本檔本身不需要改。
+#
+# 改設定就能調整行為,不用動程式碼。
+# ---------------------------------------------------------------------------
+
 [meta]
-title = "AI 與自架情報"
-keywords = ["agent", "llm", "mcp", "model", "ai", "docker", "tailscale", "obsidian", "automation", "self-host"]
+title = "我的專業簡報"
+
+# 關鍵字:標題或摘要命中就收錄。留空 = 不過濾,收全部。
+# 建議 10-30 個,太少會雜訊太多,太多會漏掉。
+# 下面是 AI 與自架相關的範例,請換成你自己關心的字。
+keywords = [
+  "agent", "llm", "mcp", "model", "ai", "docker", "automation", "self-host",
+]
+
+# true = 必須全部命中(極嚴格);false = 任一命中即可(預設)
 require_all_keywords = false
 
+# ─────────────────────────────────────────────────────
+# 來源:下面三個是 2026-10-21 實測可用的,可直接跑
+# ─────────────────────────────────────────────────────
 [[sources]]
 name = "Simon Willison"
 axis = "AI 實務"
@@ -20,3 +39,14 @@ name = "Google AI Blog"
 axis = "AI 前沿"
 url = "https://blog.google/technology/ai/rss/"
 enabled = true
+
+# ─────────────────────────────────────────────────────
+# 推播設定(兩個都可以不填,只輸出到畫面)
+# ─────────────────────────────────────────────────────
+[telegram]
+chat_id = ""
+token_env = "TELEGRAM_BOT_TOKEN"
+
+[email]
+to = ""
+from = ""

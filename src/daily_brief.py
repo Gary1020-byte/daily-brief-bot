@@ -35,6 +35,7 @@ from email.utils import parsedate_to_datetime
 PKG_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(PKG_DIR)
 CONFIG = os.path.join(ROOT, "config", "config.toml")
+EXAMPLE_CONFIG_PATH = os.path.join(ROOT, "config", "config.example.toml")
 STATE = os.path.join(ROOT, "config", "state.json")
 
 TAIPEI = timezone(timedelta(hours=8))
@@ -204,9 +205,21 @@ def matches(item, keywords, require_all=False):
     return bool(hits)
 
 
+def _require_all(cfg):
+    """讀出 `require_all_keywords`。
+
+    這個 key 文件寫在 `[meta]` 底下。舊版程式從最外層讀,所以要求嚴格比對的
+    設定檔會靜默退化成寬鬆比對 —— 工具看起來正常,卻收進使用者明確排除的內容。
+    最外層的 key 仍然接受(相容舊設定),但 `[meta]` 優先。
+    """
+    meta = cfg.get("meta", {})
+    return meta.get("require_all_keywords", cfg.get("require_all_keywords", False))
+
+
 def collect(cfg, state, limit_per_source=10, max_age_days=30):
-    keywords = [k.lower() for k in cfg.get("meta", {}).get("keywords", [])]
-    require_all = cfg.get("require_all_keywords", False)
+    meta = cfg.get("meta", {})
+    keywords = [k.lower() for k in meta.get("keywords", [])]
+    require_all = _require_all(cfg)
     cutoff = datetime.now(TAIPEI) - timedelta(days=max_age_days)
 
     fresh, errors = [], []
@@ -302,91 +315,80 @@ def send_telegram(text, cfg):
             die(f"Telegram 回應 {r.status}")
 
 
+def build_email_message(date_str, to_addr, from_addr, body):
+    """組出可以直接餵給 `himalaya template send` 的 MIME 文字。
+
+    himalaya v1.2.0 的 `template send` 只接受 -a/-c/-o 三個選項,沒有 -s/-t/-M,
+    而且 TEMPLATE 位置參數吃的是「完整 MIME 文字」而不是檔案路徑。
+    所以標頭只能寫在 stdin 的內容裡。
+    """
+    sender = (from_addr or "").strip() or to_addr
+    return (
+        f"From: {sender}\n"
+        f"To: {to_addr}\n"
+        f"Subject: [每日簡報] {date_str}\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=UTF-8\n"
+        "\n"
+        f"{body}\n"
+    )
+
+
+def himalaya_send_command(account=None):
+    """組 himalaya 指令。`-a` 是子命令層級的選項,放在子命令後面。"""
+    cmd = ["himalaya", "template", "send"]
+    if account:
+        cmd += ["-a", account]
+    return cmd
+
+
 def send_email(text, cfg):
     """用 himalaya 寄出。需要先安裝並設定好 himalaya。"""
     ecfg = cfg.get("email", {})
-    if not ecfg.get("to"):
+    to_addr = ecfg.get("to", "").strip()
+    if not to_addr:
         die("寄信需要在 config.toml 設定 [email] 的 to")
 
-    cmd = [
-        "himalaya", "template", "send",
-        "-s", f"[每日簡報] {datetime.now(TAIPEI):%Y-%m-%d}",
-        "-M", ecfg.get("from", ""),
-        ecfg["to"],
-    ]
+    date_str = f"{datetime.now(TAIPEI):%Y-%m-%d}"
+    msg = build_email_message(
+        date_str,
+        to_addr=to_addr,
+        from_addr=ecfg.get("from", ""),
+        body=text,
+    )
+
     proc = subprocess.run(
-        cmd,
-        input=text.encode(),
+        himalaya_send_command(ecfg.get("account")),
+        input=msg.encode(),
         capture_output=True,
     )
     if proc.returncode == 0:
         print("已寄出 Email", file=sys.stderr)
     else:
-        die(f"寄信失敗:{proc.stderr.decode()[:300]}")
+        err = proc.stderr.decode(errors="replace")[:300]
+        die(f"寄信失敗:{err}")
 
 
 # ─────────────────────────────────────────────────────────────
 # 設定檔產生
 # ─────────────────────────────────────────────────────────────
 
-# 內附三個 2026-10-21 實測 HTTP 200 的來源,可以直接跑
-EXAMPLE_CONFIG = '''# daily-brief 設定檔
-# 改這個檔就能調整行為,不用動程式碼。
-
-[meta]
-title = "我的專業簡報"
-
-# 關鍵字:標題或摘要命中就收錄。留空 = 不過濾,收全部。
-# 建議 10-30 個,太少會雜訊太多,太多會漏掉。
-# 下面是 AI 與自架相關的範例,請換成你自己關心的字。
-keywords = [
-  "agent", "llm", "mcp", "model", "ai", "docker", "automation", "self-host",
-]
-
-# true = 必須全部命中(極嚴格);false = 任一命中即可(預設)
-require_all_keywords = false
-
-# ─────────────────────────────────────────────────────
-# 來源:下面三個是 2026-10-21 實測可用的,可直接跑
-# ─────────────────────────────────────────────────────
-[[sources]]
-name = "Simon Willison"
-axis = "AI 實務"
-url = "https://simonwillison.net/atom/everything/"
-enabled = true
-
-[[sources]]
-name = "Hacker News"
-axis = "社群熱門"
-url = "https://news.ycombinator.com/rss"
-enabled = true
-
-[[sources]]
-name = "Google AI Blog"
-axis = "AI 前沿"
-url = "https://blog.google/technology/ai/rss/"
-enabled = true
-
-# ─────────────────────────────────────────────────────
-# 推播設定(兩個都可以不填,只輸出到畫面)
-# ─────────────────────────────────────────────────────
-[telegram]
-chat_id = ""
-token_env = "TELEGRAM_BOT_TOKEN"
-
-[email]
-to = ""
-from = ""
-'''
-
-
 def init():
+    """把 config/config.example.toml 複製成 config/config.toml。
+
+    範例內容只存在一份(在 config.example.toml),程式不再內嵌一份副本 ——
+    否則兩邊會各自漂移,使用者照著 README 改設定卻跟 --init 產生的檔案對不上。
+    """
     os.makedirs(os.path.join(ROOT, "config"), exist_ok=True)
     if os.path.exists(CONFIG):
         print(f"設定檔已存在,未覆寫:{CONFIG}")
         return
-    with open(CONFIG, "w") as f:
-        f.write(EXAMPLE_CONFIG)
+    if not os.path.exists(EXAMPLE_CONFIG_PATH):
+        die(f"找不到範例設定檔:{EXAMPLE_CONFIG_PATH}")
+    with open(EXAMPLE_CONFIG_PATH, encoding="utf-8") as f:
+        content = f.read()
+    with open(CONFIG, "w", encoding="utf-8") as f:
+        f.write(content)
     print(f"已建立範例設定檔:{CONFIG}")
     print("請先編輯這個檔,填入你的關鍵字與來源網址。")
 
@@ -414,10 +416,12 @@ def main():
 
     if args.check:
         srcs = cfg.get("sources", [])
+        meta = cfg.get("meta", {})
         print(f"設定檔檢查通過")
-        print(f"  關鍵字:{len(cfg.get('meta', {}).get('keywords', []))} 個")
+        print(f"  標題  :{meta.get('title', '(未設定)')}")
+        print(f"  關鍵字:{len(meta.get('keywords', []))} 個")
         print(f"  來源  :{len(srcs)} 個(啟用中 {sum(1 for s in srcs if s.get('enabled', True))})")
-        print(f"  嚴格比對:{cfg.get('require_all_keywords', False)}")
+        print(f"  嚴格比對:{_require_all(cfg)}")
         return
 
     state = load_state()

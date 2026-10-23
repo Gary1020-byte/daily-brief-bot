@@ -1,0 +1,65 @@
+name: Bug report
+description: Something doesn't work
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please don't paste credentials, tokens, or a
+        signed feed URL into this form — see the note at the bottom.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you see?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: The exact command you ran
+      placeholder: python3 src/daily_brief.py --dry-run
+    validations:
+      required: true
+
+  - type: textarea
+    id: check-output
+    attributes:
+      label: Output of `--check`
+      description: Run `python3 src/daily_brief.py --check` and paste the result.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      placeholder: "3.11"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: "Ubuntu 24.04"
+
+  - type: textarea
+    id: sources
+    attributes:
+      label: Your feed URLs (structure only — remove any credential part)
+      description: |
+        Give the shape of the URL, e.g. `https://example.com/blog/feed.xml`.
+        A signed URL with a `verifier=` query parameter is a credential —
+        strip it before pasting.
+      render: shell

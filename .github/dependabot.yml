@@ -1,0 +1,10 @@
+version: 2
+
+updates:
+  # The project has no third-party runtime dependencies, but the CI actions
+  # and the GitHub-provided Actions themselves do get updated.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
