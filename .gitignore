@@ -1,5 +1,11 @@
+# Your own settings — personal to each machine, never committed.
+# The shipped template lives in config/config.example.toml; `--init` copies it here.
+config/config.toml
+
+# Runtime state (dedup keys, run counter)
 config/state.json
 config/state.json.tmp
+
 __pycache__/
 *.pyc
 .DS_Store

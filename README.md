@@ -36,6 +36,10 @@ cd daily-brief-bot
 python3 src/daily_brief.py --init
 ```
 
+`--init` copies `config/config.example.toml` to `config/config.toml`.
+Edit `config/config.toml` — keywords and feed URLs live there, no code changes
+needed.
+
 ## Configure
 
 Edit `config/config.toml`:
@@ -57,6 +61,9 @@ enabled = true
 
 **Picking keywords**: 10–30 is a good range. Fewer and you get noise; more and
 you start missing things.
+
+`require_all_keywords` belongs under `[meta]`. When `true`, an article is kept
+only if it matches **every** keyword.
 
 ## Use
 
@@ -91,6 +98,9 @@ to = "you@example.com"
 from = "you@example.com"
 ```
 
+The pushed body is plain text, not HTML. The subject is generated as
+`[每日簡報] YYYY-MM-DD`. If `from` is empty, `to` is used.
+
 ## Schedule
 
 ```cron
@@ -123,6 +133,9 @@ Yes — copy a `[[sources]]` block. Test the URL first with
   comparison, so tracking variants collapse into one entry.
 - **`state.json` is written atomically** (temp file + rename), so an
   interrupted run can't leave a half-written state file behind.
+- **The example config lives in exactly one place.**
+  `config/config.example.toml` is the single source; `--init` copies it, and
+  the code no longer embeds a second copy — otherwise the two drift apart.
 
 ## License
 

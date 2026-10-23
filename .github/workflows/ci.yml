@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run unit tests
+        # No third-party dependencies — the whole point of the tool.
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Check the example config still parses
+        run: |
+          python3 -c "
+          import tomllib
+          with open('config/config.example.toml','rb') as f:
+              cfg = tomllib.load(f)
+          assert cfg['meta']['keywords'], 'no keywords in example config'
+          assert len(cfg['sources']) >= 3, 'example config needs at least 3 sources'
+          print('example config OK:', len(cfg['sources']), 'sources')
+          "
+
+      - name: Smoke test --init in a clean tree
+        run: |
+          python3 -c "
+          import os, shutil, subprocess, sys, tempfile
+          with tempfile.TemporaryDirectory() as tmp:
+              shutil.copytree('.', os.path.join(tmp, 'repo'),
+                              ignore=shutil.ignore_patterns('.git'))
+              os.remove(os.path.join(tmp, 'repo', 'config', 'config.toml'))
+              r = subprocess.run(
+                  [sys.executable, os.path.join(tmp, 'repo', 'src', 'daily_brief.py'), '--init'],
+                  capture_output=True, text=True)
+              assert r.returncode == 0, r.stderr
+              made = os.path.join(tmp, 'repo', 'config', 'config.toml')
+              assert os.path.exists(made), 'init did not create config.toml'
+              print('init OK')
+          "
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Byte-compile the source
+        run: python3 -m compileall -q src tests
