@@ -47,13 +47,14 @@ jobs:
           with tempfile.TemporaryDirectory() as tmp:
               shutil.copytree('.', os.path.join(tmp, 'repo'),
                               ignore=shutil.ignore_patterns('.git'))
-              os.remove(os.path.join(tmp, 'repo', 'config', 'config.toml'))
+              cfg = os.path.join(tmp, 'repo', 'config', 'config.toml')
+              if os.path.exists(cfg):
+                  os.remove(cfg)
               r = subprocess.run(
                   [sys.executable, os.path.join(tmp, 'repo', 'src', 'daily_brief.py'), '--init'],
                   capture_output=True, text=True)
               assert r.returncode == 0, r.stderr
-              made = os.path.join(tmp, 'repo', 'config', 'config.toml')
-              assert os.path.exists(made), 'init did not create config.toml'
+              assert os.path.exists(cfg), 'init did not create config.toml'
               print('init OK')
           "
 
