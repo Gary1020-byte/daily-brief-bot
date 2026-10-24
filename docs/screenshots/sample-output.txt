@@ -1,41 +1,43 @@
-2026-10-21 每日資訊簡報
+2026-10-25 每日資訊簡報
 ==============================
-
-AI 前沿
-------------------------------
-  Southeast Asia’s digital economy to hit $368 billion
-  10-21 12:00  ·  Google AI Blog
-  https://blog.google/company-news/inside-google/around-the-globe/google-asia/e-conomy-sea-report-2026/
 
 AI 實務
 ------------------------------
-  eMudhra Intermediate CA Compromise
-  10-20 23:50  ·  Simon Willison
-  https://simonwillison.net/2026/Oct/20/emudhra-certificates/
+  battledrones v14: Compass Rose, a four player map
+  10-24 03:59  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/24/battledrones/
 
-  Battle Drones - a vibe coded RTS with audio-based multiplayer
-  10-20 19:34  ·  Simon Willison
-  https://simonwillison.net/2026/Oct/20/battledrones/
+  Quick Study
+  10-23 21:35  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/23/quick-study-painter/
 
-  My obituary for programming
-  10-19 23:58  ·  Simon Willison
-  https://simonwillison.net/2026/Oct/19/my-obituary-for-programming/
+  Introducing Kimi K3.1 Pro
+  10-23 19:40  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/23/kimi-k31-pro/
 
-  llm-tools-datasette 0.1.1
-  10-18 23:43  ·  Simon Willison
-  https://simonwillison.net/2026/Oct/18/llm-tools-datasette/
+  DE STAAT - FREEDOM (Official Music Video)
+  10-22 19:42  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/22/de-staat-freedom/
+
+  Donating Agent Skills to the Agentic AI Foundation
+  10-22 18:09  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/22/donating-agent-skills/
+
+  Quoting Armin Ronacher
+  10-22 15:34  ·  Simon Willison
+  https://simonwillison.net/2026/Oct/22/armin-ronacher/
 
 社群熱門
 ------------------------------
-  Good type against all odds
-  10-21 09:45  ·  Hacker News
-  https://unsung.aresluna.org/good-type-against-all-odds/
+  Neural chip decodes interactions between brain regions
+  10-24 23:57  ·  Hacker News
+  https://actu.epfl.ch/news/neural-chip-decodes-interactions-between-brain-r-2/
 
-  DeepInfer: High-performance inference framework for DeepSeek models
-  10-20 17:08  ·  Hacker News
-  https://github.com/deepseek-ai/DeepInfer
+  AI-Assisted Paper on Z-Library Cites a TorrentFreak Article That Doesn't Exist
+  10-24 19:18  ·  Hacker News
+  https://torrentfreak.com/ai-assisted-paper-on-z-library-cites-a-torrentfreak-article-that-doesnt-exist/
 
-  Does Ruby on Rails still make sense?
-  10-20 05:29  ·  Hacker News
-  https://tech.dirkjonker.nl/does-ruby-on-rails-make-sense/
+  Dessa: Conversation Model trained only on speech
+  10-24 03:09  ·  Hacker News
+  https://block.xyz/dessa
 
