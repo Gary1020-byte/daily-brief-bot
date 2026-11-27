@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `scripts/package.py` — creates a deterministic zip containing the distributable
+  files and excludes private configuration and runtime state.
+- `scripts/render_screenshots.py` and three product screenshots, with refreshed
+  sample output for the product page.
+- A GitHub Actions release workflow that attaches the distributable zip to
+  published GitHub Releases.
+
 ## [1.0.0] - 2026-10-23
 
 First release. A keyword-filtered RSS digest that runs on the standard library
