@@ -16,7 +16,7 @@ jobs:
           ref: ${{ github.event.release.tag_name }}
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
 
@@ -29,4 +29,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: gh release upload "$RELEASE_TAG" "dist/daily-brief-${RELEASE_TAG}.zip"
+        run: gh release upload --clobber "$RELEASE_TAG" "dist/daily-brief-${RELEASE_TAG}.zip"
